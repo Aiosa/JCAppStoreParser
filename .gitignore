@@ -1,0 +1,13 @@
+# Log file
+*.log
+
+# Package Files #
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Binary
+JCAppStoreParser/bin/
+JCAppStoreParser/obj/
