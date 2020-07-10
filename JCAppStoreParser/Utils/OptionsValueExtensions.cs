@@ -15,7 +15,10 @@
                     return "editor_file_arg";
                 case Options.Values.GNUPG:
                     return "gnupg_executable";
-
+                case Options.Values.KEY_LEXEM_FILE:
+                    return "lexems";
+                case Options.Values.KEY_LAST_DEPENDENCY_SRC_DIR:
+                    return "dependency_src_tempdir";
             }
             return null;
         }

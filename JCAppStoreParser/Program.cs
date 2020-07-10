@@ -18,6 +18,7 @@ namespace JCAppStore_Parser
         private static Dictionary<Command, Func<string, string>> _auxiliary;
 
         //--edit --file ..\..\..\..\..\..\JCAppStore\store\info_en.json
+        [STAThread]
         public static int Main(string[] args)
         {
             _auxiliary = new Dictionary<Command, Func<string, string>>()
@@ -63,12 +64,13 @@ namespace JCAppStore_Parser
             if (args.Length < 1) return Help(null);
 
             int res;
-            if ((res = ParseArgs(args, out Command command, out Executor action, out List<Command> userArgs)) == 0) {
+            if ((res = ParseArgs(args, out Command command, out Executor action, out List<Command> userArgs)) == 0) 
+            {
                 Options options = OptionsFactory.GetOptions();
-
                 try
                 {
                     action(command, userArgs);
+                    options.Save();
                     return 0;
                 }
                 catch (Exception e)
@@ -290,6 +292,7 @@ namespace JCAppStore_Parser
                     } 
                     catch (Exception e)
                     {
+                        
                         Console.WriteLine("An exception encountered when editing. " + e.StackTrace);
                         Console.WriteLine($"Creating an auto save file {arg.ArgValue}.crashsave.json ...");
                         editor.File.ToJson($"{arg.ArgValue}.crashsave.json");

@@ -8,7 +8,9 @@
         {
             KEY_EDITOR,
             KEY_EDITOR_FILEARG,
-            GNUPG
+            GNUPG,
+            KEY_LEXEM_FILE,
+            KEY_LAST_DEPENDENCY_SRC_DIR,
         }
 
         //Editor to be used

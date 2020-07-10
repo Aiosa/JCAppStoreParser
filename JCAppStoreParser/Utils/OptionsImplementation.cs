@@ -96,6 +96,8 @@ namespace JCAppStore_Parser.Utils
             AddNotOverwrite(Values.KEY_EDITOR, "notepad");
             AddNotOverwrite(Values.KEY_EDITOR_FILEARG, "");
             AddNotOverwrite(Values.GNUPG, "gpg");
+            AddNotOverwrite(Values.KEY_LEXEM_FILE, "lexems.txt");
+            AddNotOverwrite(Values.KEY_LAST_DEPENDENCY_SRC_DIR, null);
 
             void AddNotOverwrite(Values key, string value)
             {

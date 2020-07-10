@@ -6,6 +6,7 @@ using System.Text;
 
 using JCAppStore_Parser.JsonInfoFile;
 using System.Threading;
+using JCAppStore_Parser.Utils;
 
 namespace JCAppStore_Parser
 {
@@ -19,6 +20,7 @@ namespace JCAppStore_Parser
         private string _root;
         private StoreItem _newItem;
         private MainFile _source;
+        private Lexers _lexers;
         
         private int _numOfFields;
         private volatile bool _dirty = false;
@@ -114,6 +116,7 @@ namespace JCAppStore_Parser
             Console.WriteLine($"  help\t Show help menu.");
             Console.WriteLine($"  show\t Show original values and changes.");
             Console.WriteLine($"  save\t Save changes and validate (lighweight).");
+            Console.WriteLine($"  gen\t Generate dependencies from SOURCE.");
             Console.WriteLine($"  exit\t Exit without saving.");
         }
 
@@ -181,6 +184,36 @@ namespace JCAppStore_Parser
                     }
                     Console.Clear();
                     return false;
+                case "gen":
+                    if (_lexers == null)
+                    {
+                        var lexers = OptionsFactory.GetOptions().Get(Options.Values.KEY_LEXEM_FILE);
+                        if (!File.Exists(lexers))
+                        {
+                            Console.WriteLine($"File does not exist: {Directory.GetCurrentDirectory()}\\{lexers}. " +
+                                $"Fix the problem by creating one or fill in correct file path in app config file (relative) to the working directory.");
+                            return true;
+                        }
+                        _lexers = new Lexers(lexers);
+                    }
+                    Console.WriteLine("Select a latest version this dependency list is legit for.");
+                    var list = _item.Versions.ToList();
+                    EditorTools.PrintOptions(list);
+                    Console.Write("Select the version by number: ");
+                    if (int.TryParse(Console.ReadLine(), out int value))
+                    {
+                        value--;
+                        if (value > -1 && value < list.Count)
+                        {
+                            if(!DependenciesGenerator.CreateFile(list[value], _lexers,
+                                Path.Combine(Path.Combine(_root, "JCApplets"), _item.Name))) {
+                                Console.WriteLine("Could not open selected directory.");
+                            }
+                            return true;
+                        }
+                    }
+                    Console.WriteLine("Invalid option.");
+                    return true;
                 default:
                     Console.WriteLine("Unknown command.");
                     return true;
