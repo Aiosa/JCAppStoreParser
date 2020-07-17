@@ -1,4 +1,5 @@
-﻿using JCAppStore_Parser.JsonInfoFile;
+﻿using CSharpMinifier;
+using JCAppStore_Parser.JsonInfoFile;
 using JCAppStore_Parser.Utils;
 using System;
 using System.Collections.Generic;
@@ -22,20 +23,27 @@ namespace JCAppStore_Parser
             WalkDirectoryTree(Directory.CreateDirectory(dir), file =>
             {
                 var contents = File.ReadAllText(file.FullName);
+                contents = RemoveComments(contents);
                 MatchCollection matches = Regex.Matches(contents, "([a-z0-9_-][a-z0-9_-]*)", RegexOptions.IgnoreCase);
                 foreach (Match match in matches)
                 {
                     if (lexers.TryGetValue(match.Value, out Lexem token))
                     {
-                        token.Found = true;
+                        token.Found = true; 
                     }
                 }
             });
-            var output = Path.Combine(itemLocation, $"lexems_{upToVersion}.txt");
+            var output = Path.Combine(itemLocation, $"requirements_{upToVersion}.txt");
             lexers.ToDependencyFile(output);
             Console.WriteLine($"Inspection done. Dependencies written in {output}.");
             lexers.ResetTokens();
             return true;
+        }
+
+        private static string RemoveComments(string contents)
+        {
+            //from #Regex to strip line comments from C# (stack overflow)
+            return Regex.Replace(contents, @"(@(?:""[^""]*"")+|""(?:[^""\n\\]+|\\.)*""|'(?:[^'\n\\]+|\\.)*')|//.*|/\*(?s:.*?)\*/", "$1");
         }
 
         /// <summary>

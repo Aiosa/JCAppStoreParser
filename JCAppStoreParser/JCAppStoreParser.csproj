@@ -76,6 +76,7 @@
   <ItemGroup>
     <Compile Include="CategoryEditor.cs" />
     <Compile Include="Command.cs" />
+    <Compile Include="CompileUtils.cs" />
     <Compile Include="DependenciesGenerator.cs" />
     <Compile Include="EditorTools.cs" />
     <Compile Include="ExternalEditor.cs" />

@@ -85,7 +85,6 @@ namespace JCAppStore_Parser.Utils
                 string ctg = null;
                 ForeachLineWithLexem((category, line) =>
                 {
-                   
                     bool contains = true;
                     var items = line.Split(' ');
                     for (int i = 0; i < items.Length; i++)
